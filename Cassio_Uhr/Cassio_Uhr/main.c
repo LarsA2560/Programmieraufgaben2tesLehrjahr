@@ -15,6 +15,8 @@
 #define MASK_IN_TASTER_LIGHT (1<<0)
 #define MASK_IN_TASTER_MODE (1<<1)
 #define MASK_IN_TASTER_FUNCTION (1<<6)
+
+#define MASK_OUT_MAX_BRIGHTNESS_LCD (255)
 //Maske_OUT
 
 //Maske_Divers
@@ -47,6 +49,8 @@ int main(void)
     uint8_t inTaster_Mode = 0;
     uint8_t inTaster_Function = 0;
     
+    uint8_t outLCDbrightness = 0;
+    
     uint64_t systemZeit_ms = 0;
     uint64_t sekunde = 0;
     
@@ -67,7 +71,11 @@ int main(void)
         systemZeit_ms = getSystemTimeMs();     
         //Verarbeitung_______________________________________________________________________________________________________________________________________________________          
         hh = hh_24;
-        lcdLight(255);
+        if (inTaster_Light)
+        {
+            outLCDbrightness = !outLCDbrightness;
+        }
+        
         if (inTaster_Function)
         {
             if (flag_function==2)
@@ -109,6 +117,7 @@ int main(void)
         }
              
         //Ausgabe____________________________________________________________________________________________________________________________________________________________  
+        lcdLight(outLCDbrightness*MASK_OUT_MAX_BRIGHTNESS_LCD);
         lcdWriteText(0,0,"%s %s %2u %3u",MMM[flag_function],DD[1],dd,LAP);
         lcdWriteText(1,0,"%2u:%02u:%02u",hh,mm,ss);
         //lcdWriteText(2,0,"%c %c", );     

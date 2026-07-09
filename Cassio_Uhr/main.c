@@ -14,7 +14,7 @@
 //Maske_IN
 #define MASK_IN_TASTER_LIGHT (1<<0)
 #define MASK_IN_TASTER_MODE (1<<1)
-#define MASK_IN_TASTER_FUNCTION (1<<6).
+#define MASK_IN_TASTER_FUNCTION (1<<6)
 //Maske_OUT
 
 //Maske_Divers
@@ -67,7 +67,8 @@ int main(void)
         systemZeit_ms = getSystemTimeMs();     
         //Verarbeitung_______________________________________________________________________________________________________________________________________________________          
         hh = hh_24;
-        lcdLight(255);
+        lcdLight(1);
+        
         if (inTaster_Function)
         {
             if (flag_function==2)
