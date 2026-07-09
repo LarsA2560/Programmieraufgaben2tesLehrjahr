@@ -56,6 +56,8 @@ int main(void)
     uint8_t hh_st = 0;
     uint8_t mm_st = 0;
     uint8_t ss_st = 0;
+    uint8_t hh_al = 0;
+    uint8_t mm_al = 0;
     uint8_t hh_anzeige = 0;
     uint8_t mm_anzeige = 0;
     uint8_t ss_anzeige = 0;
@@ -169,7 +171,9 @@ int main(void)
         	break;
         case TAGLICHER_ALARM:
             Wochentag_Ausgabe = AlARM;
-             
+            hh_anzeige = hh_al;
+            mm_anzeige = mm_al;
+            ss_anzeige = 0;
             break;
         case STOPPUHRFUNKTION:
             Wochentag_Ausgabe = STOPPUHR;
