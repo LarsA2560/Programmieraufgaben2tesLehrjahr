@@ -4,8 +4,10 @@
  * Created: 05/02/2026 11:52:55
  * Author : Lars
  */ 
+//#pragma GCC optimize 0
 
 #include "ucBoardDriver.h"
+
 
 //Pin Configuration
 
@@ -19,6 +21,12 @@
 #define MONTAG (0)
 
 #define MASK_OUT_MAX_BRIGHTNESS_LCD (255)
+
+#define MASK_SCHRITTGROSSE_s (1)
+#define MASK_SCHRITTGROSSE_m (1)
+#define MASK_SCHRITTGROSSE_h (1)
+#define MASK_SCHRITTGROSSE_d (1)
+#define MASK_SCHRITTGESCHWINDIGKEIT_ms (1000)
 //Maske_OUT
 
 //Maske_Divers
@@ -100,24 +108,24 @@ int main(void)
         else{
             hh = hh_24;
         }
-        if((systemZeit_ms - sekunde) >= 1000){
-            ss += 1;
+        if((systemZeit_ms - sekunde) >= MASK_SCHRITTGESCHWINDIGKEIT_ms){
+            ss += MASK_SCHRITTGROSSE_s;
             sekunde = systemZeit_ms;
         }
         if (ss>= 60)
         {
             ss = 0;
-            mm += 1;
+            mm += MASK_SCHRITTGROSSE_m;
         }
         if (mm>=60)
         {
             mm = 0;
-            hh_24 += 1;
+            hh_24 += MASK_SCHRITTGROSSE_h;
         }
         if (hh_24 >= 24)
         {
             hh_24 = 0;
-            dd += 1;
+            dd += MASK_SCHRITTGROSSE_d;
             Wochentag += 1;
         }
         if (Wochentag == SONNTAG)
