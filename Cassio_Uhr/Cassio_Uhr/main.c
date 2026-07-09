@@ -100,8 +100,8 @@ int main(void)
         else{
             hh = hh_24;
         }
-        if((systemZeit_ms - sekunde) >= 10){
-            ss += 60;
+        if((systemZeit_ms - sekunde) >= 1000){
+            ss += 1;
             sekunde = systemZeit_ms;
         }
         if (ss>= 60)
