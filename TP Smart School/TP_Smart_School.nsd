@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:nsd="https://structorizer.fisch.lu" version="3.32-35" preRepeat="until " postFor="to" preReturn="return" postForIn="in" preWhile="while " output="OUTPUT" input="INPUT" preFor="for" preExit="exit" preLeave="leave" ignoreCase="true" preThrow="throw" preForIn="foreach" stepFor="by" namespace="" author="Lars" created="2026-06-19" changedby="Lars" changed="2026-06-19" origin="Structorizer 3.32-35" text="&#34;TP_Smart_School/Lars Maerki/19.06.2026&#34;" comment="&#34;&#34;" color="ffffff" type="program" style="nice">
+	<children>
+		<instruction text="&#34;Hardware initialisieren&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+		<instruction text="&#34;alle Variablen initialisieren und auf 0 setzen&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+		<instruction text="&#34;zustand_Klassenzimmer definieren&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+		<instruction text="&#34;zustand_Klassenzimmer = AUTOMATISCH_AUS&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+		<while text="&#34;unendlichschlaufe&#34;" comment="&#34;&#34;" color="ffffff" disabled="0">
+			<qWhile>
+				<instruction text="&#34;Eingabe&#34;" comment="&#34;&#34;" color="c0c0c0" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;inTaster in inTaster_alt speichern&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;Taster einlesen und in inTaster speichern&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;inTasterPosFlanke mit Bitlogik bestimmen&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;inTasterNegFlanke mit Bitlogik bestimmen&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;Schalter einlesen und in inSchalter speichern&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;sensor_presence_detector aus inSchalter Maskieren&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;sensor_clock aus inSchalter Maskieren&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;button_classroomPosFlank aus inTasterPosFlanke Maskieren&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;button_classroomNegFlank aus inTasterNegFlanke Maskieren&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;button_caretaker aus inTasterPosFlanke Maskieren&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;Systemzeit in systemzeit_ms speichern&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;Verarbeitung&#34;" comment="&#34;&#34;" color="c0c0c0" rotated="0" disabled="0"></instruction>
+				<alternative text="&#34;button_classroomPosFlank = 1&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+					<qTrue>
+						<instruction text="&#34;start_buttonPress = systemZeit_ms&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+					</qTrue>
+					<qFalse color="ffffff">
+					</qFalse>
+				</alternative>
+				<alternative text="&#34;button_classroomNegFlank = 1&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+					<qTrue>
+						<alternative text="&#34;Tasterdruck länger als 2 Sekunden&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="ffff80," disabled="0">
+							<qTrue>
+								<instruction text="&#34;zustand_Klassenzimmer = MANUELL&#34;" comment="&#34;&#34;" color="ffff80" rotated="0" disabled="0"></instruction>
+							</qTrue>
+							<qFalse>
+								<alternative text="&#34;zustand_Klassenzimmer = AUTOMATISCH_AUS&#34;,&#34;und &#34;,&#34;sensor_presence_detector = 1&#34;,&#34;sensor_clock = 1&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="80ff80,ff8080" disabled="0">
+									<qTrue>
+										<instruction text="&#34;zustand_Klassenzimmer = AUTOMATISCH_EIN&#34;" comment="&#34;&#34;" color="80ff80" rotated="0" disabled="0"></instruction>
+									</qTrue>
+									<qFalse>
+										<instruction text="&#34;zustand_Klassenzimmer = AUTOMATISCH_AUS&#34;" comment="&#34;&#34;" color="ff8080" rotated="0" disabled="0"></instruction>
+									</qFalse>
+								</alternative>
+							</qFalse>
+						</alternative>
+					</qTrue>
+					<qFalse color="ffffff">
+					</qFalse>
+				</alternative>
+				<case text="&#34;zustand_Klassenzimmer&#34;,&#34;AUTOMATISCH_AUS&#34;,&#34;AUTOMATISCH_EIN&#34;,&#34;MANUELL&#34;,&#34;default&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="ff8080,80ff80,ffff80," disabled="0">
+					<qCase>
+						<instruction text="&#34;outLed_lighting = 0&#34;" comment="&#34;&#34;" color="ff8080" rotated="0" disabled="0"></instruction>
+						<instruction text="&#34;outLed_manual = 0&#34;" comment="&#34;&#34;" color="ff8080" rotated="0" disabled="0"></instruction>
+						<instruction text="&#34;outLed_automatic = 1&#34;" comment="&#34;&#34;" color="ff8080" rotated="0" disabled="0"></instruction>
+						<instruction text="&#34;outLed_status = 0&#34;" comment="&#34;&#34;" color="ff8080" rotated="0" disabled="0"></instruction>
+					</qCase>
+					<qCase>
+						<instruction text="&#34;outLed_lighting = 1&#34;" comment="&#34;&#34;" color="80ff80" rotated="0" disabled="0"></instruction>
+						<instruction text="&#34;outLed_manual = 0&#34;" comment="" color="80ff80" rotated="0" disabled="0"></instruction>
+						<instruction text="&#34;outLed_automatic = 1&#34;" comment="&#34;&#34;" color="80ff80" rotated="0" disabled="0"></instruction>
+						<instruction text="&#34;outLed_status = 0&#34;" comment="&#34;&#34;" color="80ff80" rotated="0" disabled="0"></instruction>
+						<alternative text="&#34;sensor_presence_detector = 0&#34;,&#34;oder&#34;,&#34;sensor_clock = 0&#34;" comment="&#34;&#34;" color="80ff80" branch_colors="ff8080," disabled="0">
+							<qTrue>
+								<instruction text="&#34;zustand_Klassenzimmer = AUTOMATISCH_AUS&#34;" comment="&#34;&#34;" color="ff8080" rotated="0" disabled="0"></instruction>
+							</qTrue>
+							<qFalse color="80ff80">
+							</qFalse>
+						</alternative>
+					</qCase>
+					<qCase>
+						<instruction text="&#34;outLed_lighting = 1&#34;" comment="&#34;&#34;" color="ffff80" rotated="0" disabled="0"></instruction>
+						<instruction text="&#34;outLed_manual = 1&#34;" comment="&#34;&#34;" color="ffff80" rotated="0" disabled="0"></instruction>
+						<instruction text="&#34;outLed_automatic = 0&#34;" comment="&#34;&#34;" color="ffff80" rotated="0" disabled="0"></instruction>
+						<alternative text="&#34;sensor_presence_detector = 0&#34;,&#34;und&#34;,&#34;sensor_clock = 0&#34;" comment="&#34;&#34;" color="ffff80" branch_colors="," disabled="0">
+							<qTrue>
+								<alternative text="&#34;button_caretaker = 1&#34;" comment="&#34;&#34;" color="ffff80" branch_colors="ff8080," disabled="0">
+									<qTrue>
+										<instruction text="&#34;zustand_Klassenzimmer = AUTOMATISCH_AUS&#34;" comment="&#34;&#34;" color="ff8080" rotated="0" disabled="0"></instruction>
+									</qTrue>
+									<qFalse color="ffff80">
+									</qFalse>
+								</alternative>
+								<alternative text="&#34;Blinktimer 500ms vergangen&#34;" comment="&#34;&#34;" color="ffff80" branch_colors="," disabled="0">
+									<qTrue>
+										<instruction text="&#34;outLed_status gleich nicht outLed_status&#34;" comment="&#34;&#34;" color="ffff80" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;blinktimer = systemZeit_ms&#34;" comment="&#34;&#34;" color="ffff80" rotated="0" disabled="0"></instruction>
+									</qTrue>
+									<qFalse color="ffff80">
+									</qFalse>
+								</alternative>
+							</qTrue>
+							<qFalse>
+								<instruction text="&#34;blinktimer = systemZeit_ms&#34;" comment="&#34;&#34;" color="ffff80" rotated="0" disabled="0"></instruction>
+								<instruction text="&#34;outLed_status = 0&#34;" comment="&#34;&#34;" color="ffff80" rotated="0" disabled="0"></instruction>
+							</qFalse>
+						</alternative>
+					</qCase>
+					<qCase color="ffffff">
+					</qCase>
+				</case>
+				<instruction text="&#34;outLed_presence_detector = sensor_presence_detector&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;outLed_sensor_clock = sensor_clock&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;Ausgabe&#34;" comment="&#34;&#34;" color="c0c0c0" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;Ausgabevariablen Maskieren und in outLed Speichern&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;outLed an den Led's ausgeben&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+			</qWhile>
+		</while>
+	</children>
+</root>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:nsd="https://structorizer.fisch.lu" version="3.32-35" preRepeat="until " postFor="to" preReturn="return" postForIn="in" preWhile="while " output="OUTPUT" input="INPUT" preFor="for" preExit="exit" preLeave="leave" ignoreCase="true" preThrow="throw" preForIn="foreach" stepFor="by" namespace="" author="MSW" created="2026-06-11" changedby="MSW" changed="2026-06-11" origin="Structorizer 3.32-35" text="&#34;meeting_safe/Lars Maerki/11.06.2026&#34;" comment="&#34;&#34;" color="ffffff" type="program" style="nice">
+	<children>
+		<instruction text="&#34;Alle Variablen Initialisieren und auf 0 setzen&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+		<instruction text="&#34;Hardware initialisieren&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+		<instruction text="&#34;zustand_Safe definieren&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+		<instruction text="&#34;zustand_Safe = BETRIEB&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+		<while text="&#34;Unendlichschlaufe&#34;" comment="&#34;&#34;" color="ffffff" disabled="0">
+			<qWhile>
+				<instruction text="&#34;Eingabe&#34;" comment="&#34;&#34;" color="c0c0c0" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;inButton in inButton_old speichern&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;Schalter einlesen und in inSchalter Speichern&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;Taster einlesen und in inButton spaichern&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;Pos Flanke Taster mit Bitlogik bestimmen&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;inSwitch_door_closed aus inSchalter maskieren&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;inSwitch_keyswitch_mode aus inSchalter maskieren&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;inSwitch_keyboard_code aus inSchalter maskieren&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;inButton_keyboard_enter aus inPosFlanke maskieren&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;systemzeit in systemZeit_ms speichern&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;code_gespeichert = 999&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;Verarbeitung&#34;" comment="&#34;&#34;" color="c0c0c0" rotated="0" disabled="0"></instruction>
+				<alternative text="&#34;mode_alt nicht = inSwitch_keyswitch_mode&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+					<qTrue>
+						<instruction text="&#34;outled_hundreds = 0&#34;,&#34;outled_tens = 0&#34;,&#34;outLed_ones = 0&#34;,&#34;flag_Alarm = 0&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+					</qTrue>
+					<qFalse color="ffffff">
+					</qFalse>
+				</alternative>
+				<instruction text="&#34;mode_alt = inSwitch_keyswitch_mode&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<alternative text="&#34;outLed_hundreds&#34;,&#34;und outLed_tens&#34;,&#34;und outLed_ones&#34;,&#34;und outled_code_ok&#34;,&#34;und outLed_silent_alarm&#34;,&#34;alle nicht an&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+					<qTrue>
+						<instruction text="&#34;outled_hundreds = 1&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+					</qTrue>
+					<qFalse color="ffffff">
+					</qFalse>
+				</alternative>
+				<case text="&#34;zustand_Safe&#34;,&#34;BETRIEB&#34;,&#34;SILENT_ALARM&#34;,&#34;EINSTELLEN&#34;,&#34;TURE_GEOFFNET&#34;,&#34;default&#34;" comment="&#34;&#34;" color="ffffff" branch_colors=",,,," disabled="0">
+					<qCase>
+						<instruction text="&#34;outLed_mode = 1&#34;,&#34;outLed_unlock = 0&#34;,&#34;outLed_silent_alarm = 1&#34;,&#34;outLed_code_ok = 0&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+						<alternative text="&#34;inSwitch_keyswitch_mode = 1&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+							<qTrue>
+								<instruction text="&#34;zustand_Safe = EINSTELLEN&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+							</qTrue>
+							<qFalse color="ffffff">
+							</qFalse>
+						</alternative>
+					</qCase>
+					<qCase>
+						<instruction text="&#34;outLed_mode = 1&#34;,&#34;outLed_unlock = 0&#34;,&#34;outLed_hundreds = 0&#34;,&#34;outled_tens = 0&#34;,&#34;outLed_ones = 0&#34;,&#34;outLed_silent_alarm = 0&#34;,&#34;outLed_code_ok = 0&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+					</qCase>
+					<qCase>
+						<instruction text="&#34;outLed_mode = 0&#34;,&#34;outLed_unlock = 0&#34;,&#34;outLed_silent_alarm = 1&#34;,&#34;outLed_code_ok = 0&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+						<alternative text="&#34;inSwitch_keyswitch_mode = 0&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+							<qTrue>
+								<instruction text="&#34;zustand_Safe = BETRIEB&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+							</qTrue>
+							<qFalse color="ffffff">
+							</qFalse>
+						</alternative>
+					</qCase>
+					<qCase>
+						<instruction text="&#34;outLed_mode = 1&#34;,&#34;outLed_unlock = 1&#34;,&#34;outLed_silent_alarm = 1&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+					</qCase>
+					<qCase color="ffffff">
+					</qCase>
+				</case>
+				<alternative text="&#34;inButton_keyboard_enter = 1&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+					<qTrue>
+						<alternative text="&#34;inswitch_keyboard_code &#62;= 10&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+							<qTrue>
+								<instruction text="&#34;outLed_hundreds = 1&#34;,&#34;outled_tens = 0&#34;,&#34;outLed_ones = 0&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+							</qTrue>
+							<qFalse>
+								<alternative text="&#34;outLed_hundreds = 1&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+									<qTrue>
+										<instruction text="&#34;outled_tens = 1&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;outLed_hundreds = 0&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;eingabe_Hunderter = inSwitch_keyboard_code&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+									</qTrue>
+									<qFalse>
+										<alternative text="&#34;outLed_tens = 1&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+											<qTrue>
+												<instruction text="&#34;outLed_ones = 1&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+												<instruction text="&#34;outLed_tens = 0&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+												<instruction text="&#34;eingabe_Zehner = inSwitch_keyboard_code&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+											</qTrue>
+											<qFalse>
+												<alternative text="&#34;outLed_ones = 1&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+													<qTrue>
+														<instruction text="&#34;outLed_ones = 0&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+														<instruction text="&#34;eingabe_Einer = inSwitch_keyboard_code&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+														<alternative text="&#34;zustand_Safe = BETRIEB&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+															<qTrue>
+																<alternative text="&#34;code_gespeichert ist gleich &#34;,&#34;eingabe_Hunderter * 100 + eingabe_Zehner * 10 + eingabe_Einer * 1&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+																	<qTrue>
+																		<instruction text="&#34;zustand_Safe = TURE_GEOFFNET&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+																	</qTrue>
+																	<qFalse>
+																		<instruction text="&#34;flag_Alarm = flag_Alarm + 1&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+																	</qFalse>
+																</alternative>
+															</qTrue>
+															<qFalse>
+																<instruction text="&#34;eingabe_Hunderter * 100 + eingabe_Zehner * 10 + eingabe_Einer * 1&#34;,&#34;in code_gespeichert speichern&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+															</qFalse>
+														</alternative>
+													</qTrue>
+													<qFalse color="ffffff">
+													</qFalse>
+												</alternative>
+											</qFalse>
+										</alternative>
+									</qFalse>
+								</alternative>
+							</qFalse>
+						</alternative>
+					</qTrue>
+					<qFalse color="ffffff">
+					</qFalse>
+				</alternative>
+				<alternative text="&#34;flag_Alarm &#62; 1&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+					<qTrue>
+						<instruction text="&#34;zustand_Safe = SILENT_ALARM&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+						<alternative text="&#34;inSwitch_keyswitch_mode = 0&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+							<qTrue>
+								<alternative text="&#34;blinktimer 500 ms vergangen&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+									<qTrue>
+										<instruction text="&#34;outLed_mode nicht gleich outLed_mode&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+										<instruction text="&#34;blinktimer =systemZeit_ms&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+									</qTrue>
+									<qFalse color="ffffff">
+									</qFalse>
+								</alternative>
+							</qTrue>
+							<qFalse>
+								<instruction text="&#34;blinktimer =systemZeit_ms&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+							</qFalse>
+						</alternative>
+						<alternative text="&#34;zustand_Safe= TURE_GEOFFNET&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+							<qTrue color="ffffff">
+							</qTrue>
+							<qFalse color="ffffff">
+							</qFalse>
+						</alternative>
+					</qTrue>
+					<qFalse color="ffffff">
+					</qFalse>
+				</alternative>
+				<instruction text="&#34;Ausgabe&#34;" comment="&#34;&#34;" color="c0c0c0" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;ausgabevariablen maskieren und in outLed Speichern&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;outLed an den Led's ausgeben&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+			</qWhile>
+		</while>
+	</children>
+</root>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:nsd="https://structorizer.fisch.lu" version="3.32-35" preRepeat="until " postFor="to" preReturn="return" postForIn="in" preWhile="while " output="OUTPUT" input="INPUT" preFor="for" preExit="exit" preLeave="leave" ignoreCase="true" preThrow="throw" preForIn="foreach" stepFor="by" namespace="" author="Lars" created="2026-04-17" changedby="Lars" changed="2026-04-17" origin="Structorizer 3.32-35" text="&#34;Einfahrt_Tiefgarage/Lars Maerki/ 17.04.2026&#34;" comment="" color="ffffff" type="program" style="nice">
+	<children>
+		<instruction text="&#34;Hardware initialisieren&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+		<instruction text="&#34;Alle Variablen Initialisieren und auf 0 setzten&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+		<instruction text="&#34;zustand_Tiefgarage definieren&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+		<instruction text="&#34;zustand_Tiefgarage = ROT_NORMALBETRIEB&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+		<while text="&#34;Unendlichschlaufe&#34;" comment="" color="ffffff" disabled="0">
+			<qWhile>
+				<instruction text="&#34;Eingabe&#34;" comment="" color="c0c0c0" rotated="0" disabled="1"></instruction>
+				<instruction text="&#34;Schalter einlesen und in inTaster speichern&#34;,&#34;Taster einlesen und in inTaster speichern&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;inSchalterLichtschranke aus inSchalter maskieren&#34;,&#34;inTaster_Einfahrt aus inTaster maskieren&#34;,&#34;inTaster_Ausfahrt aus inTaster maskieren&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;Systemzeit in systemZeit_ms speichern&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;Verarbeitung&#34;" comment="" color="c0c0c0" rotated="0" disabled="1"></instruction>
+				<case text="&#34;zustand_Tiefgarage&#34;,&#34;ROT_NORMALBETRIEB&#34;,&#34;EINFAHRT&#34;,&#34;AUSFAHRT&#34;,&#34;LICHTSCHRANKE_UNTERBROCHEN&#34;,&#34;FEHLER&#34;,&#34;default&#34;" comment="" color="ffffff" branch_colors="ff8080,80ff80,80ffff,ffff80,ff8000," disabled="0">
+					<qCase>
+						<instruction text="&#34;outLedEinfahrt_R    = 1&#34;,&#34;outLedEinfahrt_G    = 0&#34;,&#34;outLedAusfahrt_R    = 1&#34;,&#34;outLedAusfahrt_G    = 0&#34;,&#34;outLedTor = 1&#34;,&#34;flag_Blinken = 0&#34;" comment="&#34;&#34;" color="ff8080" rotated="0" disabled="0"></instruction>
+						<alternative text="&#34;inTaster_Einfahrt = 1&#34;" comment="&#34;&#34;" color="ff8080" branch_colors="80ff80," disabled="0">
+							<qTrue>
+								<instruction text="&#34;zustand_Tiefgarage = EINFAHRT&#34;" comment="&#34;&#34;" color="80ff80" rotated="0" disabled="0"></instruction>
+								<instruction text="&#34;BedienungsfehlerTimer 5s starten&#34;" comment="&#34;&#34;" color="80ff80" rotated="0" disabled="0"></instruction>
+							</qTrue>
+							<qFalse color="ff8080">
+							</qFalse>
+						</alternative>
+						<alternative text="&#34;inTaster_AUSFAHRT = 1&#34;" comment="" color="ff8080" branch_colors="80ffff," disabled="0">
+							<qTrue>
+								<instruction text="&#34;zustand_Tiefgarage = AUSFAHRT&#34;" comment="" color="80ffff" rotated="0" disabled="0"></instruction>
+								<instruction text="&#34;BedienungsfehlerTimer 5s starten&#34;" comment="" color="80ffff" rotated="0" disabled="0"></instruction>
+							</qTrue>
+							<qFalse color="ff8080">
+							</qFalse>
+						</alternative>
+					</qCase>
+					<qCase>
+						<instruction text="&#34;outLedEinfahrt_R    = 0&#34;,&#34;outLedEinfahrt_G    = 1&#34;,&#34;outLedAusfahrt_R    = 1&#34;,&#34;outLedAusfahrt_G    = 0&#34;,&#34;outLedTor = 0&#34;,&#34;flag_Blinken = 0&#34;" comment="&#34;&#34;" color="80ff80" rotated="0" disabled="0"></instruction>
+						<alternative text="&#34;BedienungsfehlerTimer abgelaufen&#34;" comment="&#34;&#34;" color="80ff80" branch_colors="ff8080," disabled="0">
+							<qTrue>
+								<instruction text="&#34;zustand_Tiefgarage = ROT_NORMALBETRIEB&#34;" comment="&#34;&#34;" color="ff8080" rotated="0" disabled="0"></instruction>
+							</qTrue>
+							<qFalse color="80ff80">
+							</qFalse>
+						</alternative>
+						<alternative text="&#34;inSchalterLichtschranke = 0&#34;" comment="&#34;&#34;" color="80ff80" branch_colors="ffff80," disabled="0">
+							<qTrue>
+								<instruction text="&#34;zustand_Tiefgarage = LICHTSCHRANKE_UNTERBROCHEN&#34;" comment="&#34;&#34;" color="ffff80" rotated="0" disabled="0"></instruction>
+								<instruction text="&#34;LichtschrankenTimer 10s starten&#34;" comment="&#34;&#34;" color="ffff80" rotated="0" disabled="0"></instruction>
+							</qTrue>
+							<qFalse color="80ff80">
+							</qFalse>
+						</alternative>
+					</qCase>
+					<qCase>
+						<instruction text="&#34;outLedEinfahrt_R    = 1&#34;,&#34;outLedEinfahrt_G    = 0&#34;,&#34;outLedAusfahrt_R    = 0&#34;,&#34;outLedAusfahrt_G    = 1&#34;,&#34;outLedTor = 0&#34;,&#34;flag_Blinken = 0&#34;" comment="&#34;&#34;" color="80ffff" rotated="0" disabled="0"></instruction>
+						<alternative text="&#34;BedienungsfehlerTimer abgelaufen&#34;" comment="" color="80ffff" branch_colors="ff8080," disabled="0">
+							<qTrue>
+								<instruction text="&#34;zustand_Tiefgarage = ROT_NORMALBETRIEB&#34;" comment="" color="ff8080" rotated="0" disabled="0"></instruction>
+							</qTrue>
+							<qFalse color="80ffff">
+							</qFalse>
+						</alternative>
+						<alternative text="&#34;inSchalterLichtschranke = 0&#34;" comment="" color="80ffff" branch_colors="ffff80," disabled="0">
+							<qTrue>
+								<instruction text="&#34;zustand_Tiefgarage = LICHTSCHRANKE_UNTERBROCHEN&#34;" comment="" color="ffff80" rotated="0" disabled="0"></instruction>
+								<instruction text="&#34;LichtschrankenTimer 10s starten&#34;" comment="" color="ffff80" rotated="0" disabled="0"></instruction>
+							</qTrue>
+							<qFalse color="80ffff">
+							</qFalse>
+						</alternative>
+					</qCase>
+					<qCase>
+						<instruction text="&#34;flag_Blinken = 0&#34;" comment="&#34;&#34;" color="ffff80" rotated="0" disabled="0"></instruction>
+						<alternative text="&#34;inSchalterLichtschranke = 1 und Entprellzeit ist abgelaufen&#34;" comment="&#34;&#34;" color="ffff80" branch_colors="ff8080," disabled="0">
+							<qTrue>
+								<instruction text="&#34;zustand_Tiefgarage = ROT_NORMALBETRIEB&#34;" comment="&#34;&#34;" color="ff8080" rotated="0" disabled="0"></instruction>
+							</qTrue>
+							<qFalse color="ffff80">
+							</qFalse>
+						</alternative>
+						<alternative text="&#34;LichtschrankenTimer abgelaufen&#34;" comment="&#34;&#34;" color="ffff80" branch_colors="ff8000," disabled="0">
+							<qTrue>
+								<instruction text="&#34;zustand_Tiefgarage = FEHLER&#34;" comment="" color="ff8000" rotated="0" disabled="0"></instruction>
+							</qTrue>
+							<qFalse color="ffff80">
+							</qFalse>
+						</alternative>
+					</qCase>
+					<qCase>
+						<instruction text="&#34;outLedEinfahrt_R    = 0&#34;,&#34;outLedEinfahrt_G    = 0&#34;,&#34;outLedAusfahrt_R    = 0&#34;,&#34;outLedAusfahrt_G    = 0&#34;,&#34;outLedTor = 0&#34;,&#34;flag_Blinken = 1&#34;" comment="&#34;&#34;" color="ff8000" rotated="0" disabled="0"></instruction>
+						<alternative text="&#34;inSchalterLichtschranke = 1&#34;" comment="&#34;&#34;" color="ff8000" branch_colors="ff8080," disabled="0">
+							<qTrue>
+								<instruction text="&#34;zustand_Tiefgarage = ROT_NORMALBETRIEB&#34;" comment="&#34;&#34;" color="ff8080" rotated="0" disabled="0"></instruction>
+							</qTrue>
+							<qFalse color="ff8000">
+							</qFalse>
+						</alternative>
+					</qCase>
+					<qCase color="ffffff">
+					</qCase>
+				</case>
+				<instruction text="&#34;Ausgabe&#34;" comment="" color="c0c0c0" rotated="0" disabled="1"></instruction>
+				<instruction text="&#34;Logik Blinken&#34;" comment="&#34;&#34;" color="8080ff" rotated="0" disabled="0"></instruction>
+				<alternative text="&#34;flag_Blinken = 1&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+					<qTrue>
+						<alternative text="&#34;Blinktimer 1s Vergangen&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+							<qTrue>
+								<instruction text="&#34;BlinkTimer = sytemZeit_ms&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+							</qTrue>
+							<qFalse color="ffffff">
+							</qFalse>
+						</alternative>
+						<alternative text="&#34;Blinktimer 500ms Vergangen&#34;" comment="&#34;&#34;" color="ffffff" branch_colors="," disabled="0">
+							<qTrue>
+								<instruction text="&#34;outLedEinfahrt_R    = 1&#34;,&#34;outLedAusfahrt_R    = 1&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+							</qTrue>
+							<qFalse>
+								<instruction text="&#34;outLedEinfahrt_G    = 1&#34;,&#34;outLedAusfahrt_G    = 1&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+							</qFalse>
+						</alternative>
+					</qTrue>
+					<qFalse>
+						<instruction text="&#34;BlinkTimer = sytemZeit_ms&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+					</qFalse>
+				</alternative>
+				<instruction text="&#34;Augabevariablen Maskieren und in outLed Speichern&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;outLed an den Led's ausgeben&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+			</qWhile>
+		</while>
+	</children>
+</root>

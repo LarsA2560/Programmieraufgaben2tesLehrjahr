@@ -1,0 +1,70 @@
+<mxfile host="Electron">
+  <diagram name="Page-1" id="e0NccAiG9mSq-Z7I-gkU">
+    <mxGraphModel dx="704" dy="511" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2tVdwlDu7Z3Ezm6r_IhO-1" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;" value="Ein" vertex="1">
+          <mxGeometry height="770" width="690" x="170" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="2tVdwlDu7Z3Ezm6r_IhO-2" parent="1" style="verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;text-decoration:underline;&quot;&gt;&lt;b&gt;Aus&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin:0px;margin-left:8px;&quot;&gt;Betriebsanzeige = 0&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;&quot;&gt;Heizanzeige = 0&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;&quot;&gt;Temperaturanzeige = 0&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;&quot;&gt;flagBlinkenTempDif = 0&lt;/p&gt;&lt;p style=&quot;margin:0px;margin-left:8px;&quot;&gt;flagBlinken_Fehler = 0&lt;/p&gt;" vertex="1">
+          <mxGeometry height="120" width="160" x="240" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="2tVdwlDu7Z3Ezm6r_IhO-4" parent="1" style="verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;text-decoration:underline;&quot;&gt;&lt;b&gt;Standby&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;Betriebsanzeige = 1&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;Heizanzeige = 0&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;Temperaturanzeige = 4 Bit Anzeige&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;flagBlinkenTempDif = 0&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;flagBlinken_Fehler = 0&lt;/p&gt;" vertex="1">
+          <mxGeometry height="130" width="210" x="280" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="2tVdwlDu7Z3Ezm6r_IhO-5" parent="1" style="shape=umlFrame;whiteSpace=wrap;html=1;pointerEvents=0;width=80;height=30;" value="Normalbetrieb" vertex="1">
+          <mxGeometry height="350" width="600" x="227" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="2tVdwlDu7Z3Ezm6r_IhO-6" parent="1" style="verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;text-decoration:underline;&quot;&gt;&lt;b&gt;Fehler&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;Betriebsanzeige = 1&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;Heizanzeige = 0&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;Temperaturanzeige = 0&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;flagBlinkenTempDif = 0&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;flagBlinken_Fehler = 1&lt;/p&gt;" vertex="1">
+          <mxGeometry height="140" width="220" x="240" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="2tVdwlDu7Z3Ezm6r_IhO-7" parent="1" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#ff0000;" value="" vertex="1">
+          <mxGeometry height="30" width="30" x="250" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="2tVdwlDu7Z3Ezm6r_IhO-8" edge="1" parent="1" source="2tVdwlDu7Z3Ezm6r_IhO-7" style="edgeStyle=orthogonalEdgeStyle;html=1;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;rounded=0;entryX=0.062;entryY=-0.013;entryDx=0;entryDy=0;entryPerimeter=0;" target="2tVdwlDu7Z3Ezm6r_IhO-5" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="565" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2tVdwlDu7Z3Ezm6r_IhO-9" parent="1" style="verticalAlign=top;align=left;overflow=fill;html=1;whiteSpace=wrap;" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;text-decoration:underline;&quot;&gt;&lt;b&gt;Temp. Diff&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot; style=&quot;border-style:solid;&quot;&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;Betriebsanzeige = 1&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;Heizanzeige = Wenn Temp tiefer&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;Temperaturanzeige = 4 Bit Anzeige&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;flagBlinkenTempDif = 1&lt;/p&gt;&lt;p style=&quot;margin: 0px 0px 0px 8px;&quot;&gt;flagBlinken_Fehler = 0&lt;/p&gt;" vertex="1">
+          <mxGeometry height="150" width="220" x="560" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="2tVdwlDu7Z3Ezm6r_IhO-13" edge="1" parent="1" source="2tVdwlDu7Z3Ezm6r_IhO-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.16;entryY=-0.002;entryDx=0;entryDy=0;entryPerimeter=0;" target="2tVdwlDu7Z3Ezm6r_IhO-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="280" y="196" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2tVdwlDu7Z3Ezm6r_IhO-17" connectable="0" parent="2tVdwlDu7Z3Ezm6r_IhO-13" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Betriebsschalter = 1&amp;nbsp;" vertex="1">
+          <mxGeometry relative="1" x="-0.2169" y="1" as="geometry">
+            <mxPoint x="-16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2tVdwlDu7Z3Ezm6r_IhO-14" edge="1" parent="1" source="2tVdwlDu7Z3Ezm6r_IhO-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.274;entryY=-0.002;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;endArrow=none;endFill=0;" target="2tVdwlDu7Z3Ezm6r_IhO-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2tVdwlDu7Z3Ezm6r_IhO-18" connectable="0" parent="2tVdwlDu7Z3Ezm6r_IhO-14" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Betriebsschalter = 0" vertex="1">
+          <mxGeometry relative="1" x="-0.0819" y="1" as="geometry">
+            <mxPoint x="24" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2tVdwlDu7Z3Ezm6r_IhO-15" edge="1" parent="1" source="2tVdwlDu7Z3Ezm6r_IhO-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.297;entryY=1.001;entryDx=0;entryDy=0;entryPerimeter=0;" target="2tVdwlDu7Z3Ezm6r_IhO-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2tVdwlDu7Z3Ezm6r_IhO-20" connectable="0" parent="2tVdwlDu7Z3Ezm6r_IhO-15" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Temp Sensor nicht = 0" vertex="1">
+          <mxGeometry relative="1" x="0.0686" y="2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2tVdwlDu7Z3Ezm6r_IhO-16" edge="1" parent="1" source="2tVdwlDu7Z3Ezm6r_IhO-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.114;entryY=1.011;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;endArrow=none;endFill=0;" target="2tVdwlDu7Z3Ezm6r_IhO-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2tVdwlDu7Z3Ezm6r_IhO-19" connectable="0" parent="2tVdwlDu7Z3Ezm6r_IhO-16" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Temp Sensor = 0" vertex="1">
+          <mxGeometry relative="1" x="0.2695" y="1" as="geometry">
+            <mxPoint y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
