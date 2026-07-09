@@ -53,9 +53,18 @@ int main(void)
     uint8_t hh_24 = 0;
     uint8_t mm = 0;
     uint8_t ss = 0;
+    uint8_t hh_st = 0;
+    uint8_t mm_st = 0;
+    uint8_t ss_st = 0;
+    uint8_t hh_anzeige = 0;
+    uint8_t mm_anzeige = 0;
+    uint8_t ss_anzeige = 0;
+    
     uint8_t flagAlarmEin = 0;
     uint8_t flagBeepEin = 0;
     uint8_t flag_function = 0;
+    uint8_t flag_Stoppuhr_lauft = 0;
+    uint8_t flag_Zwischenzeit = 0;
     uint8_t Wochentag = 0;
     uint8_t Wochentag_Ausgabe = 0;
     
@@ -70,13 +79,14 @@ int main(void)
     
     uint64_t systemZeit_ms = 0;
     uint64_t sekunde = 0;
+    uint64_t startTimerStoppuhr = 0;
     
     //Andere Variablen
        
     while (1) 
     {
         //Variablem Always Low/High
-        
+
         //Flankenerkennung
         inTaster_alt = inTaster;
         inTaster = buttonReadAllPL();
@@ -89,10 +99,7 @@ int main(void)
         //Verarbeitung_______________________________________________________________________________________________________________________________________________________          
         hh = hh_24;
         Wochentag_Ausgabe = Wochentag;
-        if (inTaster_Light)
-        {
-            outLCDbrightness = !outLCDbrightness;
-        }
+        
         if (inTaster_Mode)
         {
             zustand_mode += 1;
@@ -105,6 +112,10 @@ int main(void)
         switch (zustand_mode)
         {
         case NORMALZEITANZEIGE:
+            if (inTaster_Light)
+            {
+                outLCDbrightness = !outLCDbrightness;
+            }
             if (inTaster_Function)
             {
                 if (flag_function==2)
@@ -152,22 +163,80 @@ int main(void)
                 Wochentag = MONTAG;
                 Wochentag_Ausgabe = Wochentag;
             }
+            hh_anzeige = hh;
+            mm_anzeige = mm;
+            ss_anzeige = ss;
         	break;
         case TAGLICHER_ALARM:
-            Wochentag_Ausgabe = AlARM; 
+            Wochentag_Ausgabe = AlARM;
+             
             break;
         case STOPPUHRFUNKTION:
             Wochentag_Ausgabe = STOPPUHR;
+            if (inTaster_Function)
+            {
+                flag_Stoppuhr_lauft = !flag_Stoppuhr_lauft;
+            }
+            if (flag_Stoppuhr_lauft)
+            {
+                if((systemZeit_ms - startTimerStoppuhr) >= 10){
+                    ss_st += 1;
+                    startTimerStoppuhr = systemZeit_ms;
+                }
+                if (ss_st > 99)
+                {
+                    mm_st += 1;
+                    ss_st = 0;
+                    startTimerStoppuhr = systemZeit_ms;
+                }
+                if (mm_st > 59)
+                {
+                    hh_st += 1;
+                    mm_st = 0;
+                }
+                if (hh_st > 59)
+                {
+                    hh_st = 0;
+                }
+                if (inTaster_Light)
+                {
+                    flag_Zwischenzeit = !flag_Zwischenzeit;
+                }
+            }
+            else{
+                
+                
+                if (inTaster_Light)
+                {
+                    if (flag_Zwischenzeit)
+                    {
+                        flag_Zwischenzeit = 0;
+                    }
+                    else{
+                        ss_st = 0;
+                        mm_st = 0;
+                        hh_st = 0;
+
+                    }
+                }
+            }
+            if (!flag_Zwischenzeit)
+            {
+                hh_anzeige = hh_st;
+                mm_anzeige = mm_st;
+                ss_anzeige = ss_st;
+            }
             
             break;
         case ZEIT_KALENDER_EINSTELLFUNKTION:
             
             break;
-    	}     
+    	}
+             
         //Ausgabe____________________________________________________________________________________________________________________________________________________________  
         lcdLight(outLCDbrightness*MASK_OUT_MAX_BRIGHTNESS_LCD);
         lcdWriteText(0,0,"%s %s %2u %3u",MMM[flag_function],DD[Wochentag_Ausgabe],dd,LAP);
-        lcdWriteText(1,0,"%2u:%02u:%02u",hh,mm,ss);
+        lcdWriteText(1,0,"%2u:%02u:%02u",hh_anzeige,mm_anzeige,ss_anzeige);
         //lcdWriteText(2,0,"%c %c", );     
         //Warten_____________________________________________________________________________________________________________________________________________________________
     }
