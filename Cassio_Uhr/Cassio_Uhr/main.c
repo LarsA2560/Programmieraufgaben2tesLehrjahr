@@ -15,6 +15,8 @@
 #define MASK_IN_TASTER_LIGHT (1<<0)
 #define MASK_IN_TASTER_MODE (1<<1)
 #define MASK_IN_TASTER_FUNCTION (1<<6)
+#define SONNTAG (6)
+#define MONTAG (0)
 
 #define MASK_OUT_MAX_BRIGHTNESS_LCD (255)
 //Maske_OUT
@@ -41,6 +43,7 @@ int main(void)
     uint8_t flagAlarmEin = 0;
     uint8_t flagBeepEin = 0;
     uint8_t flag_function = 0;
+    uint8_t Wochentag = 0;
     
     uint8_t inTaster = 0;
     uint8_t inTaster_alt = 0;
@@ -114,11 +117,17 @@ int main(void)
         if (hh_24 >= 24)
         {
             hh_24 = 0;
+            dd += 1;
+            Wochentag += 1;
+        }
+        if (Wochentag == SONNTAG)
+        {
+            Wochentag = MONTAG;
         }
              
         //Ausgabe____________________________________________________________________________________________________________________________________________________________  
         lcdLight(outLCDbrightness*MASK_OUT_MAX_BRIGHTNESS_LCD);
-        lcdWriteText(0,0,"%s %s %2u %3u",MMM[flag_function],DD[1],dd,LAP);
+        lcdWriteText(0,0,"%s %s %2u %3u",MMM[flag_function],DD[Wochentag],dd,LAP);
         lcdWriteText(1,0,"%2u:%02u:%02u",hh,mm,ss);
         //lcdWriteText(2,0,"%c %c", );     
         //Warten_____________________________________________________________________________________________________________________________________________________________
