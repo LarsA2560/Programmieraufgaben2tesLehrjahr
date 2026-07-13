@@ -112,18 +112,18 @@ int main(void)
     const   uint8_t zeitsignal[]    ={
         0x00,
         0x04,
-        0x0A,
-        0x0A,
-        0x0A,
+        0x0E,
+        0x0E,
+        0x0E,
         0x1F,
-        0x04,
-        0x00
+        0x1F,
+        0x04
     };
     lcdCreateCustomChar(address_alarm,  alarmzeichen);
     lcdCreateCustomChar(address_zeit,   zeitsignal);
     const uint8_t anzahl_Tage_im_Monat[12] =
     {
-        31,28,31,30,31,30,31,31,30,31,30,31
+        0,31,28,31,30,31,30,31,31,30,31,30,31
     };        
        
     while (1) 
@@ -182,6 +182,10 @@ int main(void)
         {
             dd = 1;
             month += MASK_SCHRITTGROSSE_M;
+        }
+        if (month > 12)
+        {
+            month = 1;
         }
         switch (zustand_mode)
         {
@@ -478,10 +482,10 @@ int main(void)
         //Ausgabe____________________________________________________________________________________________________________________________________________________________  
         lcdLight    (outLCDbrightness   * MASK_OUT_MAX_BRIGHTNESS_LCD                               );
         rgbRot      (outSummer          * 1023                                                      );
-        lcdWriteText(0,0,"%s %s %2u",       MMM[flag_function], DD[Wochentag_Ausgabe],  dd          );
+        lcdWriteText(0,0,"%s %s %2u",MMM[flag_function],DD[Wochentag_Ausgabe],  dd          );
         if (!flag_Monatanzeige)
         {
-            lcdWriteText(1,0,"%2u:%02u:%02u",   hh_anzeige,         mm_anzeige,             ss_anzeige  );
+            lcdWriteText(1,0,"%2u:%02u:%02u",hh_anzeige,mm_anzeige,ss_anzeige  );
         }
         else {lcdWriteText(1,0,"%2u               ",month);}
         
