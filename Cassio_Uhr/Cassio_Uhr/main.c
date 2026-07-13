@@ -44,14 +44,17 @@ int main(void)
     char * MMM[3] = { "AM ","PM ","24h"};
     char * DD[9] = { "MO","TU","WE","TH","FR","SA","SO","AL","ST"};
     const uint8_t zwolfSunden_UHR[24] = { 120,10,20,30,40,50,60,70,80,90,100,110,121,11,21,31,41,51,61,71,81,91,101,111};
-    typedef enum zustand_mode_t        {NORMALZEITANZEIGE, TAGLICHER_ALARM, STOPPUHRFUNKTION, ZEIT_KALENDER_EINSTELLFUNKTION}             zustand_mode_t;
+    typedef enum zustand_mode_t {NORMALZEITANZEIGE, TAGLICHER_ALARM, STOPPUHRFUNKTION, ZEIT_KALENDER_EINSTELLFUNKTION}  zustand_mode_t;
+    typedef enum alarmzustand_t {AlARMZUSTAND_ALARM_ZEIT,AlARMZUSTAND_AUS,AlARMZUSTAND_ALARM,AlARMZUSTAND_ZEIT}         alarmzustand_t;
     zustand_mode_t zustand_mode = NORMALZEITANZEIGE;
+    alarmzustand_t alarmzustand = AlARMZUSTAND_ALARM_ZEIT;
         
     uint8_t dd = 0;
-    uint16_t LAP = 0;
+    
     uint8_t hh = 0;
     uint8_t hh_24 = 0;
     uint8_t mm = 0;
+    uint8_t mmalt = 0;
     uint8_t ss = 0;
     uint8_t hh_st = 0;
     uint8_t mm_st = 0;
@@ -67,6 +70,7 @@ int main(void)
     uint8_t flag_function = 0;
     uint8_t flag_Stoppuhr_lauft = 0;
     uint8_t flag_Zwischenzeit = 0;
+    uint8_t flag_alarmStummschalten = 0;
     uint8_t Wochentag = 0;
     uint8_t Wochentag_Ausgabe = 0;
     
@@ -76,14 +80,40 @@ int main(void)
     uint8_t inTaster_Light = 0;
     uint8_t inTaster_Mode = 0;
     uint8_t inTaster_Function = 0;
+    uint8_t outSummer = 0;
+    
+    uint8_t address_alarm = 1;
+    uint8_t address_zeit = 2;
     
     uint8_t outLCDbrightness = 0;
     
     uint64_t systemZeit_ms = 0;
     uint64_t sekunde = 0;
     uint64_t startTimerStoppuhr = 0;
+    uint64_t startAlarm = 0;
     
-    //Andere Variablen
+    const   uint8_t alarmzeichen[] = {
+        0x00,
+        0x00,
+        0x15,
+        0x15,
+        0x15,
+        0x15,
+        0x15,
+        0x15
+    };
+    const   uint8_t zeitsignal[] ={
+        0x00,
+        0x04,
+        0x0A,
+        0x0A,
+        0x0A,
+        0x1F,
+        0x04,
+        0x00
+    };
+    lcdCreateCustomChar(address_alarm,alarmzeichen);
+    lcdCreateCustomChar(address_zeit,zeitsignal);
        
     while (1) 
     {
@@ -100,6 +130,7 @@ int main(void)
         systemZeit_ms = getSystemTimeMs();     
         //Verarbeitung_______________________________________________________________________________________________________________________________________________________          
         hh = hh_24;
+        mmalt = mm;
         Wochentag_Ausgabe = Wochentag;
         
         if (inTaster_Mode)
@@ -165,12 +196,46 @@ int main(void)
                 Wochentag = MONTAG;
                 Wochentag_Ausgabe = Wochentag;
             }
+            if (flagAlarmEin)
+            {
+                if ((hh_24==hh_al)&&(mm==mm_al)&&(!flag_alarmStummschalten))
+                {
+                    outSummer = 1;
+                }
+            }
+            if (flagBeepEin)
+            {
+                if ((mm==00)&&(ss==00)&&(!flag_alarmStummschalten))
+                {
+                    outSummer = 1;
+                }
+            }
+            
+            
+            
             hh_anzeige = hh;
             mm_anzeige = mm;
             ss_anzeige = ss;
         	break;
         case TAGLICHER_ALARM:
             Wochentag_Ausgabe = AlARM;
+            if (inTaster_Function)
+            {
+                alarmzustand += 1;
+                if (alarmzustand >= 4)
+                {
+                    alarmzustand = 0;
+                }
+            }
+//             switch ()
+//             {
+//             case :
+//             	break;
+//             case :
+//                 break;
+//             case :
+//                 break;
+//             }
             hh_anzeige = hh_al;
             mm_anzeige = mm_al;
             ss_anzeige = 0;
@@ -236,12 +301,52 @@ int main(void)
             
             break;
     	}
-             
+        switch (alarmzustand)
+        {
+        case AlARMZUSTAND_ALARM_ZEIT:
+            lcdWriteText(2,0,"%c %c",address_alarm,address_zeit);
+            flagAlarmEin = 1;
+            flagBeepEin = 1;
+        	break;
+        case AlARMZUSTAND_AUS:
+            lcdWriteText(2,0,"        ");
+            flagAlarmEin = 0;
+            flagBeepEin = 0;
+            break;
+        case AlARMZUSTAND_ALARM:
+            lcdWriteText(2,0,"%c   ",address_alarm);
+            flagAlarmEin = 1;
+            flagBeepEin = 0;
+            break;
+        case AlARMZUSTAND_ZEIT:
+            lcdWriteText(2,0,"  %c",address_zeit);
+            flagAlarmEin = 0;
+            flagBeepEin = 1;
+            break; 
+        }
+        if (outSummer)
+        {
+            if((systemZeit_ms - startAlarm) >= 20000){
+                outSummer = 0;
+                flag_alarmStummschalten = 1;
+            }
+        }
+        else{startAlarm = systemZeit_ms;}
+        
+        if (mm == !mmalt)
+        {
+            flag_alarmStummschalten = 0;
+        }
+            
+        if (!flagAlarmEin&&!flagBeepEin)
+        {
+            outSummer = 0;
+        }
         //Ausgabe____________________________________________________________________________________________________________________________________________________________  
         lcdLight(outLCDbrightness*MASK_OUT_MAX_BRIGHTNESS_LCD);
-        lcdWriteText(0,0,"%s %s %2u %3u",MMM[flag_function],DD[Wochentag_Ausgabe],dd,LAP);
+        lcdWriteText(0,0,"%s %s %2u",MMM[flag_function],DD[Wochentag_Ausgabe],dd);
         lcdWriteText(1,0,"%2u:%02u:%02u",hh_anzeige,mm_anzeige,ss_anzeige);
-        //lcdWriteText(2,0,"%c %c", );     
+        rgbRot(outSummer * 1023);
         //Warten_____________________________________________________________________________________________________________________________________________________________
     }
 }
