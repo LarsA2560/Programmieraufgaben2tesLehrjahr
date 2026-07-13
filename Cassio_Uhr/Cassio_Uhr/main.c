@@ -98,6 +98,20 @@ int main(void)
     uint64_t sekunde                = 0;
     uint64_t startTimerStoppuhr     = 0;
     uint64_t startAlarm             = 0;
+    uint64_t blinken                = 0;
+    
+    uint8_t flag_blinken_Sekunde = 0;
+    uint8_t blinken_Sekunde = 0;
+    uint8_t flag_blinken_Minute = 0;
+    uint8_t blinken_Minute = 0;
+    uint8_t flag_blinken_Stunde = 0;
+    uint8_t blinken_Stunde = 0;
+    uint8_t flag_blinken_Tag = 0;
+    uint8_t blinken_Tag = 0;
+    uint8_t flag_blinken_Wochentag = 0;
+    uint8_t blinken_Wochentag = 0;
+    uint8_t flag_blinken_Monat = 0;
+    uint8_t blinken_Monat = 0;
     
     const   uint8_t alarmzeichen[]  = {
         0x00,
@@ -142,6 +156,12 @@ int main(void)
         //Verarbeitung_______________________________________________________________________________________________________________________________________________________          
         mmalt               = mm;
         Wochentag_Ausgabe   = Wochentag;
+        blinken_Sekunde     = 0;
+        blinken_Minute      = 0;
+        blinken_Stunde      = 0;
+        blinken_Tag         = 0;
+        blinken_Wochentag   = 0;
+        blinken_Monat       = 0;
         
         if (inTaster_Mode)
         {
@@ -262,12 +282,14 @@ int main(void)
             case ALARM_EINSTELLEN:
                 break;
             case STUNDENEINSTELLUNG:
+                flag_blinken_Stunde = 1;
                 if (inTaster_Function)
                 {
                     hh_al += 1;
                 }
                 break;
             case MINUTENEINSTELLUNG:
+                flag_blinken_Minute = 1;
                 if (inTaster_Function)
                 {
                     mm_al += 1;
@@ -348,6 +370,7 @@ int main(void)
             {
             case SEKUNDENEINSTELLUNG:
                 flag_Monatanzeige = 0;
+                flag_blinken_Sekunde = 1;
                 if (inTaster_Function)
                 {
                     ss += MASK_SCHRITTGROSSE_s;
@@ -359,6 +382,7 @@ int main(void)
                 break;
             case  STUNDENEINSTELLUNG_z:
                 flag_Monatanzeige = 0;
+                flag_blinken_Stunde = 1;
                 if (inTaster_Function)
                 {
                     hh_24 += MASK_SCHRITTGROSSE_h;
@@ -370,6 +394,7 @@ int main(void)
                 break;
             case MINUTENEINSTELLUNG_z:
                 flag_Monatanzeige = 0;
+                flag_blinken_Minute = 1;
                 if (inTaster_Function)
                 {
                     mm += MASK_SCHRITTGROSSE_m;
@@ -381,6 +406,7 @@ int main(void)
                 break;
             case MONATSEINSTELLUNG:
                 flag_Monatanzeige = 1;
+                flag_blinken_Monat = 1;
                 if (inTaster_Function)
                 {
                     month += 1;
@@ -392,6 +418,7 @@ int main(void)
                 break;
             case DATUMSEINSTELLUNG:
                 flag_Monatanzeige = 1;
+                flag_blinken_Tag = 1;
                 if (inTaster_Function)
                 {
                     dd += MASK_SCHRITTGROSSE_d;
@@ -403,6 +430,7 @@ int main(void)
                 break;            
             case WOCHENTAGSEINSTELLUNG:
                 flag_Monatanzeige = 1;
+                flag_blinken_Wochentag = 1;
                 if (inTaster_Function)
                 {
                     Wochentag += 1;
@@ -479,15 +507,75 @@ int main(void)
         {
             outSummer = 0;
         }
-        //Ausgabe____________________________________________________________________________________________________________________________________________________________  
+        //Ausgabe____________________________________________________________________________________________________________________________________________________________
         lcdLight    (outLCDbrightness   * MASK_OUT_MAX_BRIGHTNESS_LCD                               );
         rgbRot      (outSummer          * 1023                                                      );
         lcdWriteText(0,0,"%s %s %2u",MMM[flag_function],DD[Wochentag_Ausgabe],  dd          );
-        if (!flag_Monatanzeige)
+        if (zustand_mode == TAGLICHER_ALARM)
         {
-            lcdWriteText(1,0,"%2u:%02u:%02u",hh_anzeige,mm_anzeige,ss_anzeige  );
+            lcdWriteText(1,0,"%2u:%02u       ",hh_anzeige,mm_anzeige );
         }
-        else {lcdWriteText(1,0,"%2u               ",month);}
+        else{
+            if (!flag_Monatanzeige)
+            {
+                lcdWriteText(1,0,"%2u:%02u:%02u",hh_anzeige,mm_anzeige,ss_anzeige  );
+            }
+            else {lcdWriteText(1,0,"%2u               ",month);}
+            
+        }
+        if((systemZeit_ms - blinken) >= 1000){
+            blinken_Sekunde     = !blinken_Sekunde;
+            blinken_Minute      = !blinken_Minute;
+            blinken_Stunde      = !blinken_Stunde;
+            blinken_Tag         = !blinken_Tag;
+            blinken_Wochentag   = !blinken_Wochentag;
+            blinken_Monat       = !blinken_Monat;
+            blinken = systemZeit_ms;
+        }
+        
+        if (flag_blinken_Sekunde)
+        {
+            if (blinken_Sekunde)
+            {
+                lcdWriteText(1,6,"  ");
+            }
+        }
+        if (flag_blinken_Minute)
+        {
+            if (blinken_Minute)
+            {
+                lcdWriteText(1,3,"  ");
+            }
+            
+        }
+        if (flag_blinken_Stunde)
+        {
+            if (blinken_Stunde)
+            {
+                lcdWriteText(1,0,"  ");
+            }
+        }
+        if (flag_blinken_Tag)
+        {
+            if (blinken_Tag)
+            {
+                lcdWriteText(0,8,"  ");
+            }
+        }
+        if (flag_blinken_Wochentag)
+        {
+            if (blinken_Wochentag)
+            {
+                lcdWriteText(0,4,"  ");
+            }
+        }
+        if (flag_blinken_Monat)
+        {
+            if (blinken_Monat)
+            {
+                lcdWriteText(1,0,"  ");
+            }
+        }
         
         
         //Warten_____________________________________________________________________________________________________________________________________________________________
