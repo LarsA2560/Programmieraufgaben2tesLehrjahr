@@ -98,7 +98,7 @@ int main(void)
     uint64_t sekunde                = 0;
     uint64_t startTimerStoppuhr     = 0;
     uint64_t startAlarm             = 0;
-    uint64_t blinken                = 0;
+    uint64_t blinken_toggle         = 0;
     
     uint8_t flag_blinken_Sekunde = 0;
     uint8_t blinken_Sekunde = 0;
@@ -156,12 +156,12 @@ int main(void)
         //Verarbeitung_______________________________________________________________________________________________________________________________________________________          
         mmalt               = mm;
         Wochentag_Ausgabe   = Wochentag;
-        blinken_Sekunde     = 0;
-        blinken_Minute      = 0;
-        blinken_Stunde      = 0;
-        blinken_Tag         = 0;
-        blinken_Wochentag   = 0;
-        blinken_Monat       = 0;
+        flag_blinken_Sekunde     = 0;
+        flag_blinken_Minute      = 0;
+        flag_blinken_Stunde      = 0;
+        flag_blinken_Tag         = 0;
+        flag_blinken_Wochentag   = 0;
+        flag_blinken_Monat       = 0;
         
         if (inTaster_Mode)
         {
@@ -510,73 +510,116 @@ int main(void)
         //Ausgabe____________________________________________________________________________________________________________________________________________________________
         lcdLight    (outLCDbrightness   * MASK_OUT_MAX_BRIGHTNESS_LCD                               );
         rgbRot      (outSummer          * 1023                                                      );
-        lcdWriteText(0,0,"%s %s %2u",MMM[flag_function],DD[Wochentag_Ausgabe],  dd          );
-        if (zustand_mode == TAGLICHER_ALARM)
+        if (!flag_blinken_Sekunde&&!flag_blinken_Minute&&!flag_blinken_Stunde&&!flag_blinken_Tag&&!flag_blinken_Wochentag&&!flag_blinken_Monat)
         {
-            lcdWriteText(1,0,"%2u:%02u       ",hh_anzeige,mm_anzeige );
-        }
-        else{
-            if (!flag_Monatanzeige)
-            {
-                lcdWriteText(1,0,"%2u:%02u:%02u",hh_anzeige,mm_anzeige,ss_anzeige  );
-            }
-            else {lcdWriteText(1,0,"%2u               ",month);}
+            lcdWriteText(0,0,"%s %s %2u",MMM[flag_function],DD[Wochentag_Ausgabe],dd);
+            lcdWriteText(1,0,"%2u:%02u:%02u",hh_anzeige,mm_anzeige,ss_anzeige  );
             
         }
-        if((systemZeit_ms - blinken) >= 1000){
+            
+        if((systemZeit_ms - blinken_toggle) >= 1000){
             blinken_Sekunde     = !blinken_Sekunde;
             blinken_Minute      = !blinken_Minute;
             blinken_Stunde      = !blinken_Stunde;
             blinken_Tag         = !blinken_Tag;
             blinken_Wochentag   = !blinken_Wochentag;
             blinken_Monat       = !blinken_Monat;
-            blinken = systemZeit_ms;
+            blinken_toggle = systemZeit_ms;
         }
         
         if (flag_blinken_Sekunde)
         {
             if (blinken_Sekunde)
             {
-                lcdWriteText(1,6,"  ");
+                (1,0,"%2u:  :%02u",hh_anzeige,ss_anzeige  );
+            }
+            else
+            {
+                lcdWriteText(1,0,"%2u:%02u:%02u",hh_anzeige,mm_anzeige,ss_anzeige  );
             }
         }
         if (flag_blinken_Minute)
         {
-            if (blinken_Minute)
+            if (zustand_mode == TAGLICHER_ALARM)
             {
-                lcdWriteText(1,3,"  ");
+                if (blinken_Minute)
+                {
+                    lcdWriteText(1,0,"%2u:         ",hh_anzeige );
+                }
+                else
+                {
+                    lcdWriteText(1,0,"%2u:%02u       ",hh_anzeige,mm_anzeige );
+                }
             }
-            
+            else{
+                if (blinken_Minute)
+                {
+                    lcdWriteText(1,0,"%2u:  :%02u",hh_anzeige,ss_anzeige);
+                }
+                else
+                {
+                    lcdWriteText(1,0,"%2u:%02u:%02u",hh_anzeige,mm_anzeige,ss_anzeige);
+                } 
+            }                      
         }
         if (flag_blinken_Stunde)
         {
-            if (blinken_Stunde)
+            if (zustand_mode == TAGLICHER_ALARM)
             {
-                lcdWriteText(1,0,"  ");
+                if (blinken_Stunde)
+                {
+                    lcdWriteText(1,0,"  :%^02u       ",mm_anzeige);
+                }
+                else
+                {
+                    lcdWriteText(1,0,"%2u:%02u       ",hh_anzeige,mm_anzeige);
+                }
+            }
+            else{
+                if (blinken_Stunde)
+                {
+                    lcdWriteText(1,0,"  :%02u:%02u",mm_anzeige,ss_anzeige);
+                }
+                else
+                {
+                    lcdWriteText(1,0,"%2u:%02u:%02u",hh_anzeige,mm_anzeige,ss_anzeige);
+                }
             }
         }
         if (flag_blinken_Tag)
         {
+            lcdWriteText(1,0,"%2u               ",month);
             if (blinken_Tag)
             {
-                lcdWriteText(0,8,"  ");
+                lcdWriteText(0,0,"%s %s   ",MMM[flag_function],DD[Wochentag_Ausgabe]);
+            }
+            else{
+                lcdWriteText(0,0,"%s %s %2u",MMM[flag_function],DD[Wochentag_Ausgabe],dd);
             }
         }
         if (flag_blinken_Wochentag)
         {
+            lcdWriteText(1,0,"%2u               ",month);
             if (blinken_Wochentag)
             {
-                lcdWriteText(0,4,"  ");
+                lcdWriteText(0,0,"%s    %2u",MMM[flag_function],dd);
+            }
+            else{
+                lcdWriteText(0,0,"%s %s %2u",MMM[flag_function],DD[Wochentag_Ausgabe],dd);
             }
         }
         if (flag_blinken_Monat)
         {
+            lcdWriteText(0,0,"%s %s %2u",MMM[flag_function],DD[Wochentag_Ausgabe],dd);
             if (blinken_Monat)
             {
-                lcdWriteText(1,0,"  ");
+                lcdWriteText(1,0,"                 ");
+            }
+            else{
+                lcdWriteText(1,0,"%2u               ",month);
             }
         }
-        
+        lcdWriteText(3,0,"%u %u",blinken_Sekunde,blinken_toggle);
         
         //Warten_____________________________________________________________________________________________________________________________________________________________
     }
