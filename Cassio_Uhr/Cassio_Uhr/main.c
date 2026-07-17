@@ -24,7 +24,7 @@
 
 #define MASK_OUT_MAX_BRIGHTNESS_LCD (255)
 
-#define MASK_SCHRITTGROSSE_s (1)
+#define MASK_SCHRITTGROSSE_s (60)
 #define MASK_SCHRITTGROSSE_m (1)
 #define MASK_SCHRITTGROSSE_h (1)
 #define MASK_SCHRITTGROSSE_d (1)
@@ -547,7 +547,7 @@ int main(void)
             lcdWriteText(0,0,"%s %s %2u",MMM[flag_function],DD[Wochentag_Ausgabe],dd);
             if (blinken_Sekunde)
             {
-                (1,0,"%2u:%02u:  ",hh_anzeige,mm_anzeige);
+                lcdWriteText(1,0,"%2u:%02u:  ",hh_anzeige,mm_anzeige);
             }
             else
             {
