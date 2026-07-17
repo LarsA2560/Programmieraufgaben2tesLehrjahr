@@ -9,10 +9,6 @@
 #include "ucBoardDriver.h"
 
 
-//Pin Configuration
-
-//Maske DDR
-
 //Maske_IN
 #define MASK_IN_TASTER_LIGHT        (1<<0)
 #define MASK_IN_TASTER_MODE         (1<<1)
@@ -50,17 +46,9 @@
 #define MASK_FUNKTION_PM                (1)
 #define MASK_FUNKTION_24h               (2)
 
-//Maske_OUT
-
-//Maske_Divers
-
 int main(void)
 {
     initBoard(0);
-    //DDR Aktivieren
-    
-    //Pull Ups Aktivieren
-    
     //Einlese/Ausgabe Variablen
     char    * MMM[3] =                      { "AM ","PM ","24h"};
     char    * DD[9] =                       { "MO","TU","WE","TH","FR","SA","SO","AL","ST"};
