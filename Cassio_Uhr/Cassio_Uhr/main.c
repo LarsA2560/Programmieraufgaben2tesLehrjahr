@@ -14,22 +14,42 @@
 //Maske DDR
 
 //Maske_IN
-#define MASK_IN_TASTER_LIGHT (1<<0)
-#define MASK_IN_TASTER_MODE (1<<1)
-#define MASK_IN_TASTER_FUNCTION (1<<6)
-#define SONNTAG (6)
-#define MONTAG (0)
-#define AlARM (7)
-#define STOPPUHR (8)
+#define MASK_IN_TASTER_LIGHT        (1<<0)
+#define MASK_IN_TASTER_MODE         (1<<1)
+#define MASK_IN_TASTER_FUNCTION     (1<<6)
+#define SONNTAG     (6)
+#define MONTAG      (0)
+#define AlARM       (7)
+#define STOPPUHR    (8)
 
 #define MASK_OUT_MAX_BRIGHTNESS_LCD (255)
+#define MASK_BRIGHTNESS_ALARM       (1023)
+#define ZWANZIG_SEKUNDEN_TIMER      (20000)
+#define HUNDERTSTEL_SEKUNDEN_TIMER  (10)
+#define MASK_BLINKEN_PERIODENZEIT   (1000)
+#define MASK_BLINKEN_ANZEIT         (250)
 
-#define MASK_SCHRITTGROSSE_s (60)
-#define MASK_SCHRITTGROSSE_m (1)
-#define MASK_SCHRITTGROSSE_h (1)
-#define MASK_SCHRITTGROSSE_d (1)
-#define MASK_SCHRITTGROSSE_M (1)
+#define MASK_SCHRITTGROSSE_s  (1)
+#define MASK_SCHRITTGROSSE_m  (1)
+#define MASK_SCHRITTGROSSE_h  (1)
+#define MASK_SCHRITTGROSSE_d  (1)
+#define MASK_SCHRITTGROSSE_M  (1)
+#define MASK_SCHRITTGROSSE_w  (1)
+#define MASK_SCHRITTGROSSE_hs (1)
 #define MASK_SCHRITTGESCHWINDIGKEIT_ms (1000)
+
+#define MASK_HS_S   (100)
+#define MASK_S_M    (60)
+#define MASK_M_H    (60)
+#define MASK_H_D    (24)
+#define MASK_M_Y    (12)
+
+#define MASK_AM_PM_FILTER               (2)
+#define MASK_AM_PM_INDIKATOR_ENTFERNEN  (10)
+#define MASK_FUNKTION_AM                (0)
+#define MASK_FUNKTION_PM                (1)
+#define MASK_FUNKTION_24h               (2)
+
 //Maske_OUT
 
 //Maske_Divers
@@ -42,13 +62,13 @@ int main(void)
     //Pull Ups Aktivieren
     
     //Einlese/Ausgabe Variablen
-    char * MMM[3] = { "AM ","PM ","24h"};
-    char * DD[9] = { "MO","TU","WE","TH","FR","SA","SO","AL","ST"};
-    const uint8_t zwolfSunden_UHR[24] = { 120,10,20,30,40,50,60,70,80,90,100,110,121,11,21,31,41,51,61,71,81,91,101,111};
+    char    * MMM[3] =                      { "AM ","PM ","24h"};
+    char    * DD[9] =                       { "MO","TU","WE","TH","FR","SA","SO","AL","ST"};
+    const   uint8_t zwolfSunden_UHR[24] =   { 120,10,20,30,40,50,60,70,80,90,100,110,121,11,21,31,41,51,61,71,81,91,101,111};
     typedef enum zustand_mode_t             {NORMALZEITANZEIGE, TAGLICHER_ALARM, STOPPUHRFUNKTION, ZEIT_KALENDER_EINSTELLFUNKTION}                                                      zustand_mode_t;
     typedef enum alarmzustand_t             {AlARMZUSTAND_ALARM_ZEIT,AlARMZUSTAND_AUS,AlARMZUSTAND_ALARM,AlARMZUSTAND_ZEIT}                                                             alarmzustand_t;
     typedef enum zustand_alarm_einstellen_t {ALARM_EINSTELLEN,STUNDENEINSTELLUNG,MINUTENEINSTELLUNG}                                                                                    zustand_alarm_einstellen_t;
-    typedef enum zustand_zeiteinstellung_t  {SEKUNDENEINSTELLUNG,STUNDENEINSTELLUNG_z,MINUTENEINSTELLUNG_z,MONATSEINSTELLUNG,DATUMSEINSTELLUNG,WOCHENTAGSEINSTELLUNG}   zustand_zeiteinstellung_t;
+    typedef enum zustand_zeiteinstellung_t  {SEKUNDENEINSTELLUNG,STUNDENEINSTELLUNG_z,MINUTENEINSTELLUNG_z,MONATSEINSTELLUNG,DATUMSEINSTELLUNG,WOCHENTAGSEINSTELLUNG}                   zustand_zeiteinstellung_t;
     zustand_mode_t              zustand_mode                = NORMALZEITANZEIGE;
     alarmzustand_t              alarmzustand                = AlARMZUSTAND_ALARM_ZEIT;
     zustand_alarm_einstellen_t  zustand_alarm_einstellen    = ALARM_EINSTELLEN;
@@ -100,18 +120,20 @@ int main(void)
     uint64_t startAlarm             = 0;
     uint64_t blinken_toggle         = 0;
     
-    uint8_t flag_blinken_Sekunde = 0;
-    uint8_t blinken_Sekunde = 0;
-    uint8_t flag_blinken_Minute = 0;
-    uint8_t blinken_Minute = 0;
-    uint8_t flag_blinken_Stunde = 0;
-    uint8_t blinken_Stunde = 0;
-    uint8_t flag_blinken_Tag = 0;
-    uint8_t blinken_Tag = 0;
-    uint8_t flag_blinken_Wochentag = 0;
-    uint8_t blinken_Wochentag = 0;
-    uint8_t flag_blinken_Monat = 0;
-    uint8_t blinken_Monat = 0;
+    uint8_t flag_blinken_Sekunde    = 0;
+    uint8_t blinken_Sekunde         = 0;
+    uint8_t flag_blinken_Minute     = 0;
+    uint8_t blinken_Minute          = 0;
+    uint8_t flag_blinken_Stunde     = 0;
+    uint8_t blinken_Stunde          = 0;
+    uint8_t flag_blinken_Tag        = 0;
+    uint8_t blinken_Tag             = 0;
+    uint8_t flag_blinken_Wochentag  = 0;
+    uint8_t blinken_Wochentag       = 0;
+    uint8_t flag_blinken_Monat      = 0;
+    uint8_t blinken_Monat           = 0;
+    
+    uint8_t flag_stoppuhr_load = 0;
     
     const   uint8_t alarmzeichen[]  = {
         0x00,
@@ -135,7 +157,7 @@ int main(void)
     };
     lcdCreateCustomChar(address_alarm,  alarmzeichen);
     lcdCreateCustomChar(address_zeit,   zeitsignal);
-    const uint8_t anzahl_Tage_im_Monat[12] =
+    const uint8_t anzahl_Tage_im_Monat[13] =
     {
         0,31,28,31,30,31,30,31,31,30,31,30,31
     };        
@@ -168,7 +190,7 @@ int main(void)
             zustand_alarm_einstellen    = ALARM_EINSTELLEN;
             zustand_zeiteinstellung     = SEKUNDENEINSTELLUNG;
             zustand_mode                += 1;
-            if (zustand_mode > 3)
+            if (zustand_mode > ZEIT_KALENDER_EINSTELLFUNKTION)
             {
                 zustand_mode = NORMALZEITANZEIGE;
             }
@@ -177,21 +199,21 @@ int main(void)
             ss      += MASK_SCHRITTGROSSE_s;
             sekunde = systemZeit_ms;
         }
-        if (ss>= 60)
+        if (ss>= MASK_S_M)
         {
             ss = 0;
             mm += MASK_SCHRITTGROSSE_m;
         }
-        if (mm>=60)
+        if (mm>=MASK_M_H)
         {
             mm = 0;
             hh_24 += MASK_SCHRITTGROSSE_h;
         }
-        if (hh_24 >= 24)
+        if (hh_24 >= MASK_H_D)
         {
             hh_24       = 0;
             dd          += MASK_SCHRITTGROSSE_d;
-            Wochentag   += 1;
+            Wochentag   += MASK_SCHRITTGROSSE_w;
         }
         if (Wochentag > SONNTAG)
         {
@@ -203,7 +225,7 @@ int main(void)
             dd = 1;
             month += MASK_SCHRITTGROSSE_M;
         }
-        if (month > 12)
+        if (month > MASK_M_Y)
         {
             month = 1;
         }
@@ -216,43 +238,25 @@ int main(void)
             }
             if (inTaster_Function)
             {
-                if (flag_function==2)
+                if (flag_function == MASK_FUNKTION_24h)
                 {
-                    flag_function = 0;
+                    flag_function = MASK_FUNKTION_AM;
                 }
                 else
                 {
-                    flag_function = 2;
+                    flag_function = MASK_FUNKTION_24h;
                 }
             }
             if (flag_function<2)
             {
                 hh              = zwolfSunden_UHR[hh_24];
-                flag_function   = (hh % 2);
-                hh              = hh/10;
+                flag_function   = (hh % MASK_AM_PM_FILTER);
+                hh              = hh/MASK_AM_PM_INDIKATOR_ENTFERNEN;
             
             }
             else{
                 hh = hh_24;
             }
-        
-
-            if (flagAlarmEin)
-            {
-                if ((hh_24==hh_al)&&(mm==mm_al)&&(!flag_alarmStummschalten))
-                {
-                    outSummer = 1;
-                }
-            }
-            if (flagBeepEin)
-            {
-                if ((mm==00)&&(ss==00)&&(!flag_alarmStummschalten))
-                {
-                    outSummer = 1;
-                }
-            }
-            
-            
             
             hh_anzeige = hh;
             mm_anzeige = mm;
@@ -285,18 +289,36 @@ int main(void)
                 flag_blinken_Stunde = 1;
                 if (inTaster_Function)
                 {
-                    hh_al += 1;
+                    hh_al += MASK_SCHRITTGROSSE_h;
+                    if (hh_al >= MASK_H_D)
+                    {
+                        hh_al = 0;
+                    }
                 }
                 break;
             case MINUTENEINSTELLUNG:
                 flag_blinken_Minute = 1;
                 if (inTaster_Function)
                 {
-                    mm_al += 1;
+                    mm_al += MASK_SCHRITTGROSSE_m;
+                    if (mm_al >= MASK_M_H)
+                    {
+                        mm_al = 0;
+                    }
                 }
                 break;
              }
-            hh_anzeige = hh_al;
+             if (flag_function<2)
+             {
+                 hh              = zwolfSunden_UHR[hh_al];
+                 flag_function   = (hh % MASK_AM_PM_FILTER);
+                 hh              = hh/MASK_AM_PM_INDIKATOR_ENTFERNEN;
+                 
+             }
+             else{
+                 hh = hh_al;
+             }
+            hh_anzeige = hh;
             mm_anzeige = mm_al;
             ss_anzeige = 0;
             break;
@@ -308,22 +330,22 @@ int main(void)
             }
             if (flag_Stoppuhr_lauft)
             {
-                if((systemZeit_ms - startTimerStoppuhr) >= 10){
+                if((systemZeit_ms - startTimerStoppuhr) >= HUNDERTSTEL_SEKUNDEN_TIMER){
                     ss_st += 1;
                     startTimerStoppuhr = systemZeit_ms;
                 }
-                if (ss_st > 99)
+                if (ss_st >= MASK_HS_S)
                 {
                     mm_st += 1;
                     ss_st = 0;
                     startTimerStoppuhr = systemZeit_ms;
                 }
-                if (mm_st > 59)
+                if (mm_st >= MASK_S_M)
                 {
                     hh_st += 1;
                     mm_st = 0;
                 }
-                if (hh_st > 59)
+                if (hh_st >= MASK_M_H)
                 {
                     hh_st = 0;
                 }
@@ -349,7 +371,7 @@ int main(void)
                     }
                 }
             }
-            if (!flag_Zwischenzeit)
+            if ((!flag_Zwischenzeit)||flag_stoppuhr_load)
             {
                 hh_anzeige = hh_st;
                 mm_anzeige = mm_st;
@@ -374,7 +396,7 @@ int main(void)
                 if (inTaster_Function)
                 {
                     ss += MASK_SCHRITTGROSSE_s;
-                    if (ss>59)
+                    if (ss >= MASK_S_M)
                     {
                         ss = 0;
                     }                    
@@ -386,7 +408,7 @@ int main(void)
                 if (inTaster_Function)
                 {
                     hh_24 += MASK_SCHRITTGROSSE_h;
-                    if (hh_24 > 24)
+                    if (hh_24 >= MASK_H_D)
                     {
                         hh_24 = 0;
                     }
@@ -398,7 +420,7 @@ int main(void)
                 if (inTaster_Function)
                 {
                     mm += MASK_SCHRITTGROSSE_m;
-                    if (mm>59)
+                    if (mm >= MASK_M_H)
                     {
                         mm = 0;
                     }
@@ -409,8 +431,8 @@ int main(void)
                 flag_blinken_Monat = 1;
                 if (inTaster_Function)
                 {
-                    month += 1;
-                    if (month > 12)
+                    month += MASK_SCHRITTGROSSE_M;
+                    if (month > MASK_M_Y)
                     {
                         month = 1;
                     }
@@ -422,7 +444,7 @@ int main(void)
                 if (inTaster_Function)
                 {
                     dd += MASK_SCHRITTGROSSE_d;
-                    if (dd>anzahl_Tage_im_Monat[dd])
+                    if (dd>anzahl_Tage_im_Monat[month])
                     {
                         dd=1;
                     }
@@ -433,7 +455,7 @@ int main(void)
                 flag_blinken_Wochentag = 1;
                 if (inTaster_Function)
                 {
-                    Wochentag += 1;
+                    Wochentag += MASK_SCHRITTGROSSE_w;
                     if (Wochentag > SONNTAG)
                     {
                         Wochentag = MONTAG;
@@ -446,8 +468,8 @@ int main(void)
                 if (flag_function<2)
                 {
                     hh              = zwolfSunden_UHR[hh_24];
-                    flag_function   = (hh % 2);
-                    hh              = hh/10;
+                    flag_function   = (hh % MASK_AM_PM_FILTER);
+                    hh              = hh/MASK_AM_PM_INDIKATOR_ENTFERNEN;
                     
                 }
                 else{
@@ -484,6 +506,21 @@ int main(void)
             flagBeepEin     = 1;
             break; 
         }
+        if (flagAlarmEin)
+        {
+            if ((hh_24==hh_al)&&(mm==mm_al)&&(!flag_alarmStummschalten))
+            {
+                outSummer = 1;
+            }
+        }
+        if (flagBeepEin)
+        {
+            if ((mm==00)&&(ss==00)&&(!flag_alarmStummschalten))
+            {
+                outSummer = 1;
+            }
+        }
+        
         if (outSummer)
         {
             if (inTaster_Light)
@@ -491,7 +528,7 @@ int main(void)
                 outSummer               = 0;
                 flag_alarmStummschalten = 1;
             }
-            if((systemZeit_ms - startAlarm) >= 20000){
+            if((systemZeit_ms - startAlarm) >= ZWANZIG_SEKUNDEN_TIMER){
                 outSummer               = 0;
                 flag_alarmStummschalten = 1;
             }
@@ -507,12 +544,18 @@ int main(void)
         {
             outSummer = 0;
         }
-        //Ausgabe____________________________________________________________________________________________________________________________________________________________
-        lcdLight    (outLCDbrightness   * MASK_OUT_MAX_BRIGHTNESS_LCD                               );
-        rgbRot      (outSummer          * 1023                                                      );
-        if (zustand_mode == TAGLICHER_ALARM)
+        if (zustand_mode == STOPPUHRFUNKTION)
         {
-            lcdWriteText(1,5,"   ");
+            flag_stoppuhr_load = 0;
+        }
+        else{flag_stoppuhr_load = 1;}
+        //Ausgabe____________________________________________________________________________________________________________________________________________________________
+        lcdLight    (outLCDbrightness   * MASK_OUT_MAX_BRIGHTNESS_LCD   );
+        rgbRot      (outSummer          * MASK_BRIGHTNESS_ALARM         );
+        if ((zustand_mode == TAGLICHER_ALARM)&&(!blinken_Minute)&&(!blinken_Stunde))
+        {
+            lcdWriteText(0,0,"%s %s %2u",MMM[flag_function],DD[Wochentag_Ausgabe],dd);
+            lcdWriteText(1,0,"%2u:%02u       ",hh_anzeige,mm_anzeige );
         }
         if (!flag_blinken_Sekunde&&!flag_blinken_Minute&&!flag_blinken_Stunde&&!flag_blinken_Tag&&!flag_blinken_Wochentag&&!flag_blinken_Monat&&!(zustand_mode==TAGLICHER_ALARM))
         {
@@ -521,11 +564,11 @@ int main(void)
             
         }
         
-        if((systemZeit_ms - blinken_toggle) >= 1000)
+        if((systemZeit_ms - blinken_toggle) >= MASK_BLINKEN_PERIODENZEIT)
         {
             blinken_toggle = systemZeit_ms;
         }   
-        if((systemZeit_ms - blinken_toggle) <= 250){
+        if((systemZeit_ms - blinken_toggle) <= MASK_BLINKEN_ANZEIT){
             blinken_Sekunde     = 1;
             blinken_Minute      = 1;
             blinken_Stunde      = 1;
@@ -637,7 +680,6 @@ int main(void)
                 lcdWriteText(1,0,"%2u               ",month);
             }
         }
-        lcdWriteText(3,0,"%u%u",blinken_Stunde,flag_blinken_Sekunde);
         //Warten_____________________________________________________________________________________________________________________________________________________________
     }
 }
